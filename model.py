@@ -130,7 +130,7 @@ def preprocess_data_layers():
     model = Sequential()
     
     # Normalise the model
-    model.add(Lambda(lambda x: x / 255 - 0.5, input_shape=[N, 160, 320, 3], output_shape=[160, 320, 3]))
+    model.add(Lambda(lambda x: x / 255 - 0.5, input_shape=[160, 320, 3], output_shape=[160, 320, 3]))
     # Crop the image- remove the sky and the front part of the car 
     # Crop only from top and bottom, not on left and right
     model.add(Cropping2D(cropping=((70, 25),(0,0))))
