@@ -79,10 +79,6 @@ def data_generator(data_samples, batch_size=32):
                     image = cv2.imread(current_path)
                     # Get the image appended
                     images.append(image)
-#                     # Flip the image
-#                     flipped_image = cv2.flip(image, 1)
-#                     # Get the augmented image appended
-#                     augmented_images.append(flipped_image)      
                 
                 # Now that we have centre, left and right images, we need to add a correction
                 # When car turns left, it is steering angle plus correction, and when the car turns right
@@ -96,11 +92,6 @@ def data_generator(data_samples, batch_size=32):
                 steering_angle.append(angle + correction)
                 # Append the steering measurement in the array for the right image
                 steering_angle.append(angle - correction)
-                 # Get the steering_angle appended in augmented steering_angle array
-#                 # flip the steering angle
-#                 flipped_steering_angle = float(angle) * -1.0
-#                 # Append the augmented steering angle
-#                 augmented_steering_angle.append(flipped_steering_angle)       
 
             # Flip the images and the steering angle
             for img, ang in zip(images, steering_angle):
@@ -164,9 +155,7 @@ def nvdia_cnn(model):
     
     return model
 
-# def main():
-#     if __name__ == "__main__":
-#         main()
+
 # Set the batch size
 batch_size =  32
 # Read csv file
