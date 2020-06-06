@@ -23,7 +23,7 @@ def read_csv():
     # Array to store training data
     training_data = []
     
-    with open("./data/driving_log.csv") as csvfile:
+    with open("./data_new/driving_log.csv") as csvfile:
         read_file = csv.reader(csvfile)
         for line in read_file:
             training_data.append(line)   
@@ -41,18 +41,20 @@ def split_samples(training_data):
 
 # Generate training or validation data with help of python generator
 def data_generator(data_samples, batch_size=32):
+    
     # Length of the training or validation sample
     data_sample_length = len(data_samples)
 
     # Loop forever so the generator never terminates
     while 1: 
+        # Shuffle the data
         data_samples = sklearn.utils.shuffle(data_samples)
         
         # Loop through every batch
         for offset in range(0, data_sample_length, batch_size):
             # Get the batch data
             batch_data = data_samples[offset : offset + batch_size]	
-            print("batch_data:", len(batch_data))
+
             # arrays to store images and steering angle
             images = []
             steering_angle = []
@@ -74,7 +76,7 @@ def data_generator(data_samples, batch_size=32):
                     # Get the last row of the line which is the path of the image
                     file_name = source_path.split('/')[-1]
                     # Get the current path of the image
-                    current_path = "./my_data/IMG/" + file_name 
+                    current_path = "./data_new/IMG/" + file_name 
                     # read the image from the path
                     image = cv2.imread(current_path)
                     # Get the image appended
@@ -110,16 +112,9 @@ def data_generator(data_samples, batch_size=32):
             total_images.extend(augmented_images) 
             total_angles.extend(steering_angle)  
             total_angles.extend(augmented_steering_angle) 
-
-            print("images:", len(images))
-            print("steering angle:", len(steering_angle))
-            print("augmented image:", len(augmented_images))
-            print("augmented steering angle:",len(augmented_steering_angle))
-            print("total images:", len(total_images))
-            print("total angles:",len(total_angles))            
             
-            # Get the X and Y training set: the images are the features per batch
-            # and the steering is the label per batch
+            # Get the X and Y training set: the total_images are the features per batch
+            # and the total_angles is the label per batch
             X_train_batch, Y_train_batch = np.asarray(total_images), np.asarray(total_angles)
 
             yield sklearn.utils.shuffle(X_train_batch, Y_train_batch)  
@@ -127,10 +122,9 @@ def data_generator(data_samples, batch_size=32):
 # Model to create layers for preprocessing data        
 def preprocess_data_layers():
     # Create models layer by layer
-    model = Sequential()
-    
+    model = Sequential()    
     # Normalise the model
-    model.add(Lambda(lambda x: x / 255 - 0.5, input_shape=[160, 320, 3], output_shape=[160, 320, 3]))
+    model.add(Lambda(lambda x: (x / 255.0) - .5, input_shape=(160, 320, 3)))
     # Crop the image- remove the sky and the front part of the car 
     # Crop only from top and bottom, not on left and right
     model.add(Cropping2D(cropping=((70, 25),(0,0))))
@@ -146,15 +140,12 @@ def nvdia_cnn(model):
     model.add(Conv2D(64, (3,3), activation='relu'))
     model.add(Flatten())
     model.add(Dense(100))
-#     model.add(Dropout(0.5))
     model.add(Dense(50))
-#     model.add(Dropout(0.5))
     model.add(Dense(10))
     # Final is a single node
     model.add(Dense(1))
     
     return model
-
 
 # Set the batch size
 batch_size =  32
@@ -182,7 +173,7 @@ model.summary()
 model.fit_generator(train_generator, steps_per_epoch=math.ceil(len(X_train)/batch_size), 
             validation_data=validation_generator, validation_steps=math.ceil(len(X_valid)/batch_size), 
             epochs=3, verbose=1)
-
+|# Save the model
 model.save('model.h5')
     
     

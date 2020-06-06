@@ -5,54 +5,6 @@ import os
 import shutil
 
 import numpy as np
-
-Toggle Sidebar
-Project Behavioral Cloning
-/>home>workspace>CarND-Behavioral-Cloning-P3
-1
-import argparse
-2
-import base64
-3
-from datetime import datetime
-4
-import os
-5
-import shutil
-6
-​
-7
-import numpy as np
-8
-import socketio
-9
-import eventlet
-10
-import eventlet.wsgi
-11
-from PIL import Image
-12
-from flask import Flask
-13
-from io import BytesIO
-14
-​
-15
-from keras.models import load_model
-16
-import h5py
-17
-from keras import __version__ as keras_version
-18
-​
-19
-sio = socketio.Server()
-20
-app = Flask(__name__)
-21
-model = None
-+
-BASH
 import socketio
 import eventlet
 import eventlet.wsgi
