@@ -198,7 +198,7 @@ def nvdia_cnn(model):
     model.add(Conv2D(36, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
     model.add(Conv2D(48, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
     model.add(Conv2D(64, (3,3), activation='relu', W_regularizer=l2(0.001)))
-	model.add(Conv2D(64, (3,3), activation='relu', W_regularizer=l2(0.001)))
+    model.add(Conv2D(64, (3,3), activation='relu', W_regularizer=l2(0.001)))
     model.add(Flatten())
     model.add(Dense(100, W_regularizer=l2(0.001)))
     model.add(Dropout(0.25))
