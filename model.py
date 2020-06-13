@@ -19,8 +19,13 @@ from keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping
 from sklearn.model_selection import train_test_split
 from keras.regularizers import l2
 
-# Read image paths from csv file
 def read_csv():
+    """
+    This function reads image paths from csv file
+
+    :param : None
+    :return: Training data
+    """
     # Array to store training data
     training_data = []
     
@@ -35,15 +40,26 @@ def read_csv():
 
     return training_data
 
-# Split the samples into training and validation samples
 def split_samples(training_data):
-    # Splitting samples and creating generators - 80 perecnt training data and 20 perecnt validation data
-     training_sample, validation_sample = train_test_split(training_data, test_size=0.2)
-        
-     return training_sample, validation_sample 
+    """
+    This function Splits the samples into training and validation samples
 
-       
+    :param training_data: Training data
+    :return: Training and validation sample
+    """
+    # Splitting samples and creating generators - 80 perecnt training data and 20 perecnt validation data
+    training_sample, validation_sample = train_test_split(training_data, test_size=0.2)
+        
+    return training_sample, validation_sample 
+
+
 def read_batch_data(batch_data):
+    """
+    This function reads the images and the steering angle batch by batch
+
+    :param batch_data: data batch by batch
+    :return: images and steering angle
+    """
     # arrays to store images and steering angle
     images = []
     steering_angle = [] 
@@ -76,12 +92,17 @@ def read_batch_data(batch_data):
         # Append the steering measurement in the array for the right image
         steering_angle.append(angle - correction)
     
-#     print("images", len(images))
-#     print("steering angke", len(steering_angle))
-    
     return images, steering_angle
 
+
 def flip_images(images, steering_angle):
+    """
+    This function flips the images and the steering angle 
+
+    :param images         : images
+    :param steering_angle : steering angle
+    :return: images and steering angle
+    """
     # arrays to store the augmented images and steering angle
     augmented_images = []
     augmented_steering_angle = []  
@@ -98,12 +119,18 @@ def flip_images(images, steering_angle):
         # Append the augmented steering angle
         augmented_steering_angle.append(flipped_steering_angle)  
     
-#     print("aug_img", len(augmented_images))
-#     print("aug_ang", len(augmented_steering_angle))
     return augmented_images, augmented_steering_angle
 
-# Generate training or validation data with help of python generator
+
 def data_generator(data_samples, batch_size=32):
+    """
+    This function generate training or validation data with 
+    help of python generator
+
+    :param data_samples : training or vaidation samples
+    :param batch_size   : batch size
+    :return: Features(X_train) and labels(Y_train)
+    """
     
     # Length of the training or validation sample
     data_sample_length = len(data_samples)
@@ -133,9 +160,6 @@ def data_generator(data_samples, batch_size=32):
             total_angles.extend(steering_angle)  
             total_angles.extend(augmented_steering_angle)    
             
-#             print("tot_img", len(total_images))
-#             print("tot_ang", len(total_angles))
-            
             # Get the X and Y training set: the total_images are features per batch
             # and the total_angles is the label per batch
             X_train_batch, Y_train_batch = np.asarray(total_images), np.asarray(total_angles)
@@ -145,6 +169,13 @@ def data_generator(data_samples, batch_size=32):
               
 # Model to create layers for preprocessing data        
 def preprocess_data_layers():
+    """
+    This function creates layers for preprocessing the data like
+    normalizing and cropping.
+
+    :param : None
+    :return: created model
+    """
     # Create models layer by layer
     model = Sequential()    
     # Normalise the model
@@ -155,8 +186,13 @@ def preprocess_data_layers():
     
     return model
 
-# Create nvdia model
 def nvdia_cnn(model):
+    """
+    This function creates the NVDIA model architecture
+
+    :param : created sequential model
+    :return: NVDIA model
+    """
     # Add a convolution layers - 6 filters, 5x5 each
     model.add(Conv2D(24, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
     model.add(Conv2D(36, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
@@ -215,7 +251,7 @@ plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
 plt.savefig('loss.png')
-# plt.show()
+
     
     
 
