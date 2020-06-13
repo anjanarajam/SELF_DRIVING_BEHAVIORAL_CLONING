@@ -193,11 +193,12 @@ def nvdia_cnn(model):
     :param : created sequential model
     :return: NVDIA model
     """
-    # Add a convolution layers - 6 filters, 5x5 each
+    # Add five convolution layers - 3 filters, 5x5 each and then two filters with 3x3 each
     model.add(Conv2D(24, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
     model.add(Conv2D(36, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
     model.add(Conv2D(48, (5,5), subsample=(2,2), activation='relu', W_regularizer=l2(0.001)))
     model.add(Conv2D(64, (3,3), activation='relu', W_regularizer=l2(0.001)))
+	model.add(Conv2D(64, (3,3), activation='relu', W_regularizer=l2(0.001)))
     model.add(Flatten())
     model.add(Dense(100, W_regularizer=l2(0.001)))
     model.add(Dropout(0.25))
