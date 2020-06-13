@@ -45,7 +45,7 @@ def split_samples(training_data):
     This function Splits the samples into training and validation samples
 
     :param training_data: Training data
-    :return: Training and validation sample
+    :return             : Training and validation sample
     """
     # Splitting samples and creating generators - 80 perecnt training data and 20 perecnt validation data
     training_sample, validation_sample = train_test_split(training_data, test_size=0.2)
@@ -58,7 +58,7 @@ def read_batch_data(batch_data):
     This function reads the images and the steering angle batch by batch
 
     :param batch_data: data batch by batch
-    :return: images and steering angle
+    :return          : images and steering angle
     """
     # arrays to store images and steering angle
     images = []
@@ -101,7 +101,7 @@ def flip_images(images, steering_angle):
 
     :param images         : images
     :param steering_angle : steering angle
-    :return: images and steering angle
+    :return               : Flipped images and steering angle
     """
     # arrays to store the augmented images and steering angle
     augmented_images = []
@@ -129,7 +129,7 @@ def data_generator(data_samples, batch_size=32):
 
     :param data_samples : training or vaidation samples
     :param batch_size   : batch size
-    :return: Features(X_train) and labels(Y_train)
+    :return             : Features(X_train) and labels(Y_train)
     """
     
     # Length of the training or validation sample
